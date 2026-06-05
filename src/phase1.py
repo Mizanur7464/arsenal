@@ -1,5 +1,6 @@
 """Phase 1 completion check — scope, config, docs, .env."""
 
+import os
 from pathlib import Path
 
 from .config_loader import load_config, ROOT
@@ -37,6 +38,9 @@ def check_phase1() -> bool:
                 warn(hint)
 
     for p in REQUIRED_FILES:
+        if p.name == ".env" and os.getenv("RAILWAY_ENVIRONMENT"):
+            step("File: .env (Railway Variables)", bool(os.getenv("ACCOUNT_EMAIL")))
+            continue
         step(f"File: {p.name}", p.is_file())
 
     for p in REQUIRED_DOCS:
@@ -50,7 +54,10 @@ def check_phase1() -> bool:
     step("Test event block", "test_event" in config)
 
     env_path = ROOT / ".env"
-    if env_path.is_file():
+    if os.getenv("RAILWAY_ENVIRONMENT"):
+        step("DRY_RUN set", bool(os.getenv("DRY_RUN")))
+        step("HEADLESS set", bool(os.getenv("HEADLESS")))
+    elif env_path.is_file():
         text = env_path.read_text(encoding="utf-8")
         step("DRY_RUN in .env", "DRY_RUN" in text)
         step("HEADLESS in .env", "HEADLESS" in text)

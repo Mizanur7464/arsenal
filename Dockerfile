@@ -1,5 +1,5 @@
 # Playwright + Chromium — required for Railway (Nixpacks alone cannot build this bot)
-FROM mcr.microsoft.com/playwright/python:v1.49.0-jammy
+FROM mcr.microsoft.com/playwright/python:v1.60.0-jammy
 
 WORKDIR /app
 

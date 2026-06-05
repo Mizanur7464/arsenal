@@ -33,8 +33,9 @@ def load_config(path: Path | None = None) -> dict:
     with open(path, encoding="utf-8") as f:
         data = yaml.safe_load(f)
     _apply_env_filter_overrides(data)
+    headless_default = "true" if os.getenv("RAILWAY_ENVIRONMENT") else "false"
     data["_env"] = {
-        "headless": os.getenv("HEADLESS", "false").lower() == "true",
+        "headless": os.getenv("HEADLESS", headless_default).lower() == "true",
         "page_timeout_ms": int(os.getenv("PAGE_TIMEOUT_MS", "60000")),
         "dry_run": os.getenv("DRY_RUN", "true").lower() == "true",
         "account_email": (os.getenv("ACCOUNT_EMAIL") or "").strip(),
