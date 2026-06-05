@@ -1,4 +1,5 @@
-# Playwright comes from Docker base image on Railway — do not pip-upgrade there
+# Must match Dockerfile base image: mcr.microsoft.com/playwright/python:v1.60.0-jammy
+playwright==1.60.0
 python-dotenv>=1.0.0
 pyyaml>=6.0.1
 rich>=13.7.0

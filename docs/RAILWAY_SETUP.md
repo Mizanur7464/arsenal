@@ -36,4 +36,4 @@ Railway servers may be US — Arsenal can show "Restricted access". If that happ
 
 ## 6. Local vs Railway
 - **Local PC:** `pip install -r requirements-local.txt && playwright install chromium`
-- **Railway:** uses Docker image browsers (no pip playwright)
+- **Railway:** `playwright==1.60.0` in requirements.txt + Docker image `v1.60.0-jammy` (versions must match)

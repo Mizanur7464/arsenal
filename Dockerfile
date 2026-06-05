@@ -3,9 +3,10 @@ FROM mcr.microsoft.com/playwright/python:v1.60.0-jammy
 
 WORKDIR /app
 
-# Base image already includes Playwright 1.60 + Chromium — do NOT pip install playwright
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Same version as base image — reuses bundled Chromium in /ms-playwright (no playwright install)
+RUN pip install --no-cache-dir -r requirements.txt \
+    && python -c "from playwright.sync_api import sync_playwright; print('playwright import OK')"
 
 COPY . .
 
