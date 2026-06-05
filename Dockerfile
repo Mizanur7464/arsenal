@@ -3,6 +3,7 @@ FROM mcr.microsoft.com/playwright/python:v1.60.0-jammy
 
 WORKDIR /app
 
+# Base image already includes Playwright 1.60 + Chromium — do NOT pip install playwright
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 

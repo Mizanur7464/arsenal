@@ -1,0 +1,5 @@
+# Local PC install: pip install -r requirements-local.txt && playwright install chromium
+playwright==1.60.0
+python-dotenv>=1.0.0
+pyyaml>=6.0.1
+rich>=13.7.0

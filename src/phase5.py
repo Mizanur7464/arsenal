@@ -263,22 +263,31 @@ def _run_e2e(config: dict, env: dict, *, keep_browser: bool = False):
     else:
         step(3, TOTAL_STEPS, "Launch browser (Playwright Chromium)")
     sub(f"HEADLESS={env['headless']} | TIMEOUT={timeout}ms")
-    pw, browser, page = launch_browser(env["headless"])
-    sub_ok("Browser opened")
+    pw, browser, page = None, None, None
     try:
+        pw, browser, page = launch_browser(env["headless"])
+        sub_ok("Browser opened")
         result = _run_e2e_core(page, config, env, navigate=True)
     except Exception as e:
-        result = {"ok": False, "error": str(e)}
-        sub_err(str(e))
-    finally:
+        result = {"ok": False, "error": str(e), "login": False}
+        sub_err(f"Browser/run error: {e}")
         if keep_browser:
+            sub_warn("Monitoring paused — fix error then /start_on or restart deploy")
+            return result, None
+    else:
+        if keep_browser and pw and browser:
             sub_ok("Browser kept open for monitoring loop")
             return result, (pw, browser, page)
-        sub("Closing browser in 3 seconds...")
-        if not env["headless"]:
-            page.wait_for_timeout(3000)
-        close_browser(pw, browser)
-        sub_ok("Browser closed")
+    finally:
+        if pw and browser and not keep_browser:
+            sub("Closing browser in 3 seconds...")
+            if page and not env["headless"]:
+                try:
+                    page.wait_for_timeout(3000)
+                except Exception:
+                    pass
+            close_browser(pw, browser)
+            sub_ok("Browser closed")
     return result
 
 
@@ -425,6 +434,8 @@ def run_phase5() -> bool:
         except KeyboardInterrupt:
             set_monitoring(False)
             sub_warn("Stopped by user (Ctrl+C)")
+    elif load_state().get("monitoring") and not session:
+        sub_warn("Browser failed to start — Telegram still active; send /start_on to retry")
 
     step(8, TOTAL_STEPS, "Save handover report and delivery zip")
     report_path = _write_handover_report(e2e, phase1_ok)
