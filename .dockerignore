@@ -1,0 +1,9 @@
+venv/
+.env
+output/
+data/browser_profile/
+__pycache__/
+*.pyc
+.git/
+arsenal-bot-delivery.zip
+*.png
