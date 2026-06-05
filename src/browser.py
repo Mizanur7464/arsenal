@@ -1,5 +1,6 @@
 """Playwright browser helpers — persistent profile keeps login session."""
 
+import os
 from pathlib import Path
 from datetime import datetime
 
@@ -22,12 +23,22 @@ def launch_browser(headless: bool) -> tuple[Playwright, BrowserContext, Page]:
     sub("Starting Playwright Chromium (saved session profile)...")
     PROFILE_DIR.mkdir(parents=True, exist_ok=True)
     pw = sync_playwright().start()
+    chromium_args = ["--disable-blink-features=AutomationControlled"]
+    if os.getenv("RAILWAY_ENVIRONMENT") or os.getenv("DOCKER") or os.getenv("CI"):
+        chromium_args.extend(
+            [
+                "--no-sandbox",
+                "--disable-setuid-sandbox",
+                "--disable-dev-shm-usage",
+            ]
+        )
+        sub("Docker/Railway mode — Chromium sandbox disabled")
     context = pw.chromium.launch_persistent_context(
         user_data_dir=str(PROFILE_DIR),
         headless=headless,
         viewport={"width": 1280, "height": 900},
         locale="en-GB",
-        args=["--disable-blink-features=AutomationControlled"],
+        args=chromium_args,
     )
     page = context.pages[0] if context.pages else context.new_page()
     sub_ok(f"Browser ready — profile: {PROFILE_DIR.name}/")

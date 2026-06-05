@@ -14,7 +14,13 @@ from src.phase5 import run_phase5
 
 def main():
     if len(sys.argv) == 1:
-        raise SystemExit(0 if run_phase5() else 1)
+        import os
+
+        ok = run_phase5()
+        # Railway restarts on exit code 1 — only fail if not cloud-hosted
+        if ok or os.getenv("RAILWAY_ENVIRONMENT"):
+            raise SystemExit(0)
+        raise SystemExit(1)
 
     cmd = sys.argv[1].lower()
     if cmd in ("phase1", "1", "check"):

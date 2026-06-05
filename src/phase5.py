@@ -351,8 +351,19 @@ def _monitor_loop(config: dict, env: dict, session: tuple) -> None:
 
 
 def run_phase5() -> bool:
+    import os
+    from .bot_state import set_monitoring
+
     banner("Arsenal Bot — FINAL", "Ticket search + Telegram commands")
     divider("FINAL RUN — follow each STEP below")
+
+    if os.getenv("RAILWAY_ENVIRONMENT") or os.getenv("AUTO_MONITOR", "").lower() in (
+        "1",
+        "true",
+        "yes",
+    ):
+        set_monitoring(True)
+        sub_ok("Cloud deploy — monitoring auto-started (Telegram /stop to pause)")
 
     step(1, TOTAL_STEPS, "Load config.yaml and .env")
     config = load_config()
@@ -434,6 +445,9 @@ def run_phase5() -> bool:
         err("FAILED — fix .env or check output/ screenshots")
 
     if telegram_api_ok:
+        keep_listening_until_ctrl_c()
+    elif os.getenv("RAILWAY_ENVIRONMENT"):
+        sub_warn("Telegram not connected — staying alive for Railway (check Variables)")
         keep_listening_until_ctrl_c()
     else:
         divider("TELEGRAM NOT CONNECTED")

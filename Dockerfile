@@ -13,5 +13,7 @@ RUN mkdir -p /app/data /app/output
 
 ENV PYTHONUNBUFFERED=1
 ENV HEADLESS=true
+ENV AUTO_MONITOR=true
+# Railway sets RAILWAY_ENVIRONMENT automatically
 
 CMD ["python", "run.py"]
