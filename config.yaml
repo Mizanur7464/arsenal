@@ -1,0 +1,53 @@
+# Arsenal Bot — config (Phase 2: buyer URLs added)
+
+project:
+  name: arsenal-bot
+  delivery_phase: 5
+  bot_type: browser_automation
+
+scope:
+  price_usd: 700
+  timeline_days: 5
+  includes:
+    - Arsenal bot design and build
+    - Testing on buyer-chosen fixture
+    - Stability and dry-run safety
+  excludes:
+    - Chelsea bot (separate phase and price after Arsenal is stable)
+
+test_event:
+  status: configured
+  name: "Arsenal EDP Event 3891 (buyer fixture)"
+  event_id: 3891
+  url: "https://www.eticketing.co.uk/arsenal/EDP/Event/Index/3891?position=1"
+  queue_url: "https://hd-queue.eticketing.co.uk/softblock/?c=ticketmastersportuk&e=3lfm3lywwsb5v4l4hcvq&t=https%3A%2F%2Fwww.eticketing.co.uk%2Farsenal%2FEDP%2FEvent%2FIndex%2F3891%3Fposition%3D1&cid=en-GB&rticr=2"
+  notes: "Buyer updated 2026-05-21 — event 3891; queue t= param points to same event"
+
+site:
+  club: Arsenal FC
+  platform: eticketing
+  base_url: "https://www.eticketing.co.uk/arsenal/"
+  login_path: "/arsenal/"
+  flow_doc: "docs/FLOW.md"
+
+filters:
+  quantity: 1
+  max_price: null
+  sections: []
+  seats_together: false
+  ticket_exchange: true
+  testing_note: "Buyer 2026-05-21: qty 1, seats OFF; TX was off on 3891 — buyer says Ticket Exchange OPEN now"
+
+retry:
+  max_attempts: 3
+  delay_seconds: 3
+  queue_wait_seconds: 180
+  map_ready_seconds: 6
+  monitor_reload: true
+  skip_queue_when_closed: true
+
+# Phase 4 — stability test plan (5–6 runs, headless + quantity)
+stability:
+  total_runs: 6
+  headless_modes: [false, false, false, true, true, true]
+  quantity_tests: [1, 2, 1, 2, 3, 1]

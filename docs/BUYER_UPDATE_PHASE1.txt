@@ -1,0 +1,15 @@
+Hi — Phase 1 (scope & setup) is complete.
+
+Done:
+- Project scope documented (Arsenal bot, 5-day plan, testing on your chosen game)
+- Config ready for quantity and filters
+- Ticket site flow mapped for development
+- Python environment and safe dry-run mode (no purchase during early tests)
+
+Before I start Phase 2 (browser automation), please confirm or send:
+1. The exact ticket page URL for the test game (from your screenshot), if not already in chat
+2. This is browser automation (not a Telegram bot) — correct?
+
+Chelsea remains a separate phase after Arsenal is stable and tested.
+
+Thanks!

@@ -1,0 +1,25 @@
+Hi — Arsenal bot Phase 1 is complete and ready for you.
+
+Included in delivery:
+- Full Python source code (browser automation for Arsenal eTicketing)
+- Config for your test event (ID 3774) and queue link
+- Dry-run mode by default (no automatic purchase)
+- Filters: quantity, max price, sections
+- Stability testing (Phase 4) with retry and queue/captcha detection
+- Setup guide in README.md
+
+How to run:
+1. Install Python 3.10+, then: pip install -r requirements.txt && playwright install chromium
+2. Copy .env.example to .env and add your login
+3. python run.py phase1  (check setup)
+4. python run.py phase3  (filters test) or phase5 (full handover test)
+
+Important:
+- Keep DRY_RUN=true until you are ready to test purchases manually
+- Chelsea bot will be a separate phase with its own scope and price
+
+Attached: delivery zip (no password file — add your own .env locally), screenshots from output/ folder, and handover report.
+
+Let me know when you want to start the Chelsea phase.
+
+Thanks!
